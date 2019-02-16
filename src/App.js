@@ -1,39 +1,43 @@
 import React, { Component } from 'react';
 import './App.css';
-import audioconcat from 'audioconcat';
+// import audioconcat from 'audioconcat';
 
 class App extends Component {
-
-  componentDidMount() {
-
-    console.log('componentDidMount called');
-
-      const songs =
-        ['everything_changed.mp3',
-        'fear_is_a_liar.mp3',
-        'my_liberty.mp3'];
-      console.log('songs are',songs);
-
-       audioconcat(songs)
-       .concat('all.mp3')
-       .on('start', function (command) {
-         console.log('ffmpeg process started:', command)
-       })
-       .on('error', function (err, stdout, stderr) {
-         console.error('Error:', err)
-         console.error('ffmpeg stderr:', stderr)
-       })
-       .on('end', function (output) {
-         console.error('Audio created in:', output)
-       })
-       console.log('audioconcat result is',audioconcat);
+  constructor(props) {
+    super(props);
+    this.state ={};
   }
+
+   stopSound = () => {
+     console.log('stopSound called');
+    if (this.source) {
+        // this.source.stop(0);
+    }
+}
+ playSound = () => {
+   console.log('playSound called');
+    // source is global so we can call .stop() later.
+    // this.source = context.createBufferSource();
+    this.source.buffer = this.audioBuffer;
+    this.source.loop = false;
+    this.source.connect(this.context.destination);
+    // this.source.start(0); // Play immediately.
+}
+
 
   render() {
     return (
       <div className="App">
         <header className="App-header">
-          hai
+        <input type="file" accept="audio/*" />
+        <br/>
+        <button onClick={this.playSound()} disabled>Start</button>
+        <button onClick={this.stopSound()} disabled>Stop</button>
+        <div>
+        <p>This will be the output of a base64 string representation of your sound file.</p>
+        <textarea id="encodedResult" cols="100" rows="10">
+        </textarea>
+        </div>
         </header>
       </div>
     );
