@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 // import audioconcat from 'audioconcat';
+import FileConversion from '../src/fileConversion/FileConversion';
 
 class App extends Component {
   constructor(props) {
@@ -8,36 +9,41 @@ class App extends Component {
     this.state ={};
   }
 
-   stopSound = () => {
-     console.log('stopSound called');
-    if (this.source) {
-        // this.source.stop(0);
-    }
-}
- playSound = () => {
-   console.log('playSound called');
-    // source is global so we can call .stop() later.
-    // this.source = context.createBufferSource();
-    this.source.buffer = this.audioBuffer;
-    this.source.loop = false;
-    this.source.connect(this.context.destination);
-    // this.source.start(0); // Play immediately.
-}
+  componentDidMount() {
+    // function getData(/home/jerold/Music/Songs/Eng/fear_is_a_liar.mp3, callback) {
+    // var reader = new FileReader();
+    // reader.onload = function(event) {
+    //     var data = event.target.result.split(',')
+    //      , decodedImageData = btoa(data[1]);                    // the actual conversion of data from binary to base64 format
+    //     callback(decodedImageData);
+    // };
+    // reader.readAsDataURL(fear_is_a_liar.mp3);
+    // }
+    // console.log('getData is',getData);
+  }
 
+  goTBblobUrl = (data) => {
+    console.log('blobUrl clicked');
+    let blob=new Blob(["everything_changed.mp3","fear_is_a_liar.mp3"], {type : 'audio/mp3'});
+    console.log('blob is',blob);
+    var blobUrl = URL.createObjectURL(blob);
+    console.log('blobUrl is',blobUrl);
+    // var blob = new Blob([final_transformation], {type: "text/plain;charset=utf-8"});
+    // saveAs(blob, "hello world.txt");
+    // let binary= convertDataURIToBinary(data);
+    // let blob=new Blob([binary], {type : 'audio/ogg'});
+    // let blobUrl = URL.createObjectURL(blob);
+  }
 
   render() {
+
     return (
-      <div className="App">
+      <div className="App-header" >
         <header className="App-header">
-        <input type="file" accept="audio/*" />
+          <h3>Audio merging!!</h3>
         <br/>
-        <button onClick={this.playSound()} disabled>Start</button>
-        <button onClick={this.stopSound()} disabled>Stop</button>
-        <div>
-        <p>This will be the output of a base64 string representation of your sound file.</p>
-        <textarea id="encodedResult" cols="100" rows="10">
-        </textarea>
-        </div>
+        <FileConversion />
+        <br/>
         </header>
       </div>
     );
