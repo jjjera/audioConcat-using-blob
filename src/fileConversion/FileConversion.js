@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
+import {ConcatenateBlobs, POST_to_Server} from 'concatenateblobs';
 
 class FileConversion extends Component {
 constructor(props) {
   super(props);
   this.state = {mergedAudio:''};
+  this.store = [];
+  console.log('cons store',this.store);
   // console.log('mergedAudio is',this.state.mergedAudio);
   // this.getBase64Format = this.getBase64Format.bind(this);
 }
@@ -30,14 +33,25 @@ constructor(props) {
           console.log('reader.onload func called');
          // console.log('result is',reader.result);
          const content = reader.result;
+         this.store.push(content);
+         console.log('store values are',this.store.push(content));
+          ConcatenateBlobs(this.store, 'audio/mp3', function(resultingBlob) {
+              console.log('resultingBlob is',resultingBlob);
+            // or preview locally
+          // localVideo.src = URL.createObjectURL(resultingBlob);
+          this.setState({mergedAudio:resultingBlob});
+        });
          // console.log('content is',content);
          // const endResult = this.state.mergedAudio + content;
+
          // console.log('endResult',endResult);
-         const enc = window.btoa(this.state.mergedAudio + content);
-         const dec = window.atob(enc);
-         // console.log('dec is',dec);
-         this.setState({mergedAudio:dec});
-         console.log('setState is',this.state.mergedAudio);
+         // this.setState({mergedAudio:endResult});
+         // console.log('setState is',this.state.mergedAudio);
+         // for (var i = 0; i < endResult.length; i++) {
+         //   // store.push(files);
+         //   console.log('condition is',store.push(endResult));
+         // }
+         // console.log('store values');
         };
       reader.onerror =  (error) => {
        console.log('Error: ', error);
